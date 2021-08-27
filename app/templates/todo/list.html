@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+<h2>{{ todo_list | length }} 件のTodo</h2>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}">優先度</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?priority=1">低</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?priority=2">中</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?priority=3">高</a>
+    </li>
+</ol>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}">状態</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?status=1">未着手</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?status=2">実施中</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_list' %}?status=3">完了</a>
+    </li>
+</ol>
+
+<table class="table table-striped">
+    <tr>
+        <th>期限</th>
+        <th>タイトル</th>
+        <th>優先度</th>
+        <!-- <th>状態</th> -->
+        <th>操作</th>
+    </tr>
+    {% for todo in todo_list %}
+    <tr>
+        <td>{{ todo.close_datetime | date }}</td>
+        <td>
+            <a href="{% url 'app:todo_detail' todo.pk %}">
+                {{ todo.title | truncatechars:16 }}
+            </a>
+            {% if todo.text %}
+            <br>{{ todo.text | truncatechars:16 }}
+            {% endif %}
+        </td>
+        <td>{{ todo.get_priority_display }}</td>
+        <!-- <td>{{ todo.get_status_display }}</td> -->
+        <td>
+            <form method="POST" action="{% url 'app:todo_switch_status' %}">
+                {% csrf_token %}
+                <input type="hidden" name="pk" value="{{ todo.pk }}">
+                {% if todo.status == 1 %}
+                <button type="submit" class="btn btn-sm btn-primary">「実施中」<br>に進める</button>
+                {% elif todo.status == 2 %}
+                <button type="submit" class="btn btn-sm btn-success">「完了」<br>に進める</button>
+                {% elif todo.status == 3 %}
+                <button type="submit" class="btn btn-sm btn-warning btn-disabled">「未着手」<br>に戻す</button>
+                {% endif %}
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">該当するTodoがありません。</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

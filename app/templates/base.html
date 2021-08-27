@@ -1,0 +1,56 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>とどっとこむ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'css/my.css' %}">
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar navbar-dark bg-primary fixed-top">
+            <a class="navbar-brand" href="{% url 'app:todo_list' %}">とどっとこむ</a>
+        </nav>
+    </header>
+
+    <ol class="breadcrumb">
+        {% if request.user.is_authenticated %}
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:todo_list' %}">
+                Todo一覧
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:todo_create' %}">
+                Todo新規作成
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:user_detail' request.user.pk %}">
+                マイページ
+            </a>
+        </li>
+        {% else %}
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:user_create' %}">
+                ユーザ新規作成
+            </a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'app:login' %}">
+                ログイン
+            </a>
+        </li>
+        {% endif %}
+    </ol>
+
+    {% block contents %}
+    no contents
+    {% endblock %}
+</body>
+
+</html>

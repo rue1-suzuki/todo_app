@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+<h2>{{ todo.title }} の詳細</h2>
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_update' todo.pk %}">このTodoを編集する</a>
+    </li>
+    <li class="breadcrumb-item">
+        <a href="{% url 'app:todo_delete' todo.pk %}">このTodoを削除する</a>
+    </li>
+</ol>
+
+<table class="table table-striped">
+    <tr>
+        <th>詳細</th>
+        <td>
+            {{ todo.text | linebreaksbr }}
+        </td>
+    </tr>
+    <tr>
+        <th>期限</th>
+        <td>
+            {{ todo.close_datetime | date }}<br>
+            {{ todo.close_datetime | time }}
+        </td>
+    </tr>
+    <tr>
+        <th>状態</th>
+        <td>{{ todo.get_status_display }}</td>
+    </tr>
+    <tr>
+        <th>優先度</th>
+        <td>{{ todo.get_priority_display }}</td>
+    </tr>
+    <tr>
+        <th>作成日時</th>
+        <td>
+            {{ todo.created_at | date }}<br>
+            {{ todo.created_at | time }}
+        </td>
+    </tr>
+    <tr>
+        <th>更新日時</th>
+        <td>
+            {{ todo.updated_at | date }}<br>
+            {{ todo.updated_at | time }}
+        </td>
+    </tr>
+</table>
+{% endblock %}

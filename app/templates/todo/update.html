@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block contents %}
+<h2>Todo更新</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    <input type="submit" class="btn btn-primary btn-lg btn-block">
+</form>
+{% endblock %}
